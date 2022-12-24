@@ -4,7 +4,9 @@ import MusicBg from "../img/musicbg.jpg";
 import {FcGoogle}  from "react-icons/fc";
 
 const Login = () => {
-   
+   const login = async () =>{
+     alert("clicked me");
+   }
      return (
      <Flex 
      justifyContent={'center'}
@@ -25,8 +27,12 @@ const Login = () => {
      alignItems={'center'}
      >
        <HStack>
-          <Button leftIcon={<FcGoogle fontSize={25}/>} colorScheme="whiteAlpha" shadow={'lg'}>
-               Signin With Google
+          <Button leftIcon={<FcGoogle fontSize={25}/>}
+           colorScheme="whiteAlpha"
+           shadow={'lg'}
+           onClick={() => login()}
+           >
+           Signin With Google
           </Button>
        </HStack>
      </Flex>
