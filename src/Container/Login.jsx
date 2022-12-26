@@ -3,10 +3,27 @@ import{Button, Flex, HStack, Image} from "@chakra-ui/react";
 import MusicBg from "../img/musicbg.jpg";
 import {FcGoogle}  from "react-icons/fc";
 
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {} from 'firebase/firestore';
+import { firebaseApp} from '../firebase-config';
+import {useNavigate} from "react-router-dom";
+
 const Login = () => {
+
+  const firebaseAuth = getAuth(firebaseApp);
+  const provider     = new GoogleAuthProvider();
+
+  const navigate = useNavigate();
+
    const login = async () =>{
-     alert("clicked me");
-   }
+      const {user} = await signInWithPopup(firebaseAuth,provider);
+      const {refreshToken, providerData} = user;
+
+      localStorage.setItem("user", JSON.stringify(providerData));
+      localStorage.setItem("accessToken", JSON.stringify(refreshToken));
+   };
+
+
      return (
      <Flex 
      justifyContent={'center'}
