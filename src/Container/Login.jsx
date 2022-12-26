@@ -4,7 +4,7 @@ import MusicBg from "../img/musicbg.jpg";
 import {FcGoogle}  from "react-icons/fc";
 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import {} from 'firebase/firestore';
+import {doc,getFirestore,setDoc} from 'firebase/firestore';
 import { firebaseApp} from '../firebase-config';
 import {useNavigate} from "react-router-dom";
 
@@ -12,6 +12,7 @@ const Login = () => {
 
   const firebaseAuth = getAuth(firebaseApp);
   const provider     = new GoogleAuthProvider();
+  const firebaseDB   = getFirestore(firebaseApp);
 
   const navigate = useNavigate();
 
@@ -21,6 +22,13 @@ const Login = () => {
 
       localStorage.setItem("user", JSON.stringify(providerData));
       localStorage.setItem("accessToken", JSON.stringify(refreshToken));
+      
+      await setDoc(
+         doc(firebaseDB, 'users', providerData[0].uid),
+         providerData[0]
+      );
+
+      navigate('/', {replace: true});
    };
 
 
