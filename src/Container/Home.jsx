@@ -2,6 +2,7 @@ import React from 'react'
 import { Category, Create, Feed, NavBar, Search, VideoPin } from '../Components';
 import {Flex} from "@chakra-ui/react";
 import {Routes, Route} from "react-router-dom"; 
+import {categories} from '../data';
 
 const Home = ({user}) => {
    
@@ -14,7 +15,7 @@ const Home = ({user}) => {
          alignItems={'center'}
          width='20'
        >
-        <Category/>
+        {categories  && categories.map(data => <Category key={data.id} data={data}/>)}
        </Flex>
 
        <Flex width={'full'} 
