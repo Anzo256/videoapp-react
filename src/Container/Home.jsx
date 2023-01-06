@@ -9,19 +9,17 @@ const Home = ({user}) => {
        return ( <>
 
        <NavBar  user={ user} />
-       <Flex
+        <Flex width={'100vw'}>
+        <Flex
          direction={'column'} 
          justifyContent='start'
          alignItems={'center'}
-         width='20'
+         width='10%'
        >
         {categories  && categories.map(data => <Category key={data.id} data={data}/>)}
        </Flex>
 
-       <Flex width={'full'} 
-       justifyContent='center' 
-       alignItems={'center'} 
-       px='4'
+       <Flex width={'90%'} px={4}
        >
         <Routes>
             <Route  path="/" element={ <Feed/> }/>  
@@ -31,6 +29,7 @@ const Home = ({user}) => {
             <Route  path="/search" element={ <Search/> }/>      
         </Routes>
        </Flex>
+        </Flex>
        </>
         ) ;
 };
