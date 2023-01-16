@@ -1,9 +1,13 @@
 //prettier-ignore
 import {Input, Flex, useColorMode, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, Button, Text, InputGroup, InputLeftElement, FormLabel, Box } from '@chakra-ui/react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoChevronDown, IoCloudUpload, IoLocation } from 'react-icons/io5';
 import { categories } from '../data';
 import Spinner from './Spinner';
+
+//prettier-ignore
+import {getStorage,ref,uploadBytesResumable,getDownloadURL,deleteObject} from "firebase/storage";
+import {firebaseApp} from "../firebase-config";
 
 const Create = () => {
   const { colorMode} = useColorMode();
@@ -15,7 +19,34 @@ const Create = () => {
   const [category, setCategory] = useState('Choose a category');
   const [location, setLocation] = useState('');
   const [videoAsset, setVideoAsset] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(1)
+
+  const storage = getStorage(firebaseApp);
+
+  const uploadImage = (e) => {
+      setLoading(true)
+      const videoFile = e.target.files[0];
+      const storageRef = ref(storage,`videos/${Date.now()}-${videoFile.name}`);
+      const uploadTask = uploadBytesResumable(storageRef,videoFile);
+
+      uploadTask.on('state_changed',(snapshot) =>{
+      const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      setProgress(uploadProgress)
+    },(error)=>{
+     console.log(error);
+    },()=>{
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        setVideoAsset(downloadURL)
+        setLoading(false)
+      });
+    });
+
+  };
+
+  useEffect(()=>{
+    console.log
+  },[videoAsset])
   return (
     <Flex justifyContent={'center'}
     alignItems='center'
@@ -120,7 +151,7 @@ const Create = () => {
              cursor='pointer'
               >
                 {loading ? (
-                  <Spinner />
+                  <Spinner  msg={'Uploading Your Video'} progress={progress}/>
                 ) : (
                   <>
                    <IoCloudUpload 
@@ -135,6 +166,16 @@ const Create = () => {
               </Flex>
             </Flex>
 
+           {!loading && (
+             <input 
+             type={'file'}
+             name='upload-image'
+             onChange={uploadImage}
+             style={{width : 0 , height : 0}}
+             accept="video/mp4,video/x-m4v,video/*"
+             />
+             
+           )}
           </FormLabel>
         ) :  (<Box>Something</Box>)} 
        </Flex>

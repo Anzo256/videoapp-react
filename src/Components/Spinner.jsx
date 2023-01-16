@@ -4,9 +4,9 @@ import {Circles} from "react-loader-spinner";
 
 const Spinner = ({msg, progress}) => {
     useEffect(()=>{
-
     },[progress]);
-   return (<Flex 
+   return (
+   <Flex 
    direction={'column'}
    justifyContent={'center'}
    alignItems="center"
