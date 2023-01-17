@@ -1,13 +1,14 @@
 //prettier-ignore
 import {Input, Flex, useColorMode, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, Button, Text, InputGroup, InputLeftElement, FormLabel } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react'
-import { IoChevronDown, IoCloudUpload, IoLocation, IoTrash } from 'react-icons/io5';
+import { IoCheckmark, IoChevronDown, IoCloudUpload, IoLocation, IoTrash } from 'react-icons/io5';
 import { categories } from '../data';
 import Spinner from './Spinner';
 
 //prettier-ignore
 import {getStorage,ref,uploadBytesResumable,getDownloadURL,deleteObject} from "firebase/storage";
 import {firebaseApp} from "../firebase-config";
+import AlertMsg from './AlertMsg';
 
 const Create = () => {
   const { colorMode} = useColorMode();
@@ -20,10 +21,17 @@ const Create = () => {
   const [location, setLocation] = useState('');
   const [videoAsset, setVideoAsset] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(1)
+  const [progress, setProgress] = useState(1);
+  const [alert, setAlert] = useState(false);
+  const [alertstatus, setalertStatus] = useState('');
+  const [alertMsg, setalertMsg] = useState('');
+  const [alertIcon, setAlertIcon] = useState(null);
+
+
+
+
 
   const storage = getStorage(firebaseApp);
-
   const uploadImage = (e) => {
       setLoading(true)
       const videoFile = e.target.files[0];
@@ -37,8 +45,15 @@ const Create = () => {
      console.log(error);
     },()=>{
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        setVideoAsset(downloadURL)
-        setLoading(false)
+        setVideoAsset(downloadURL);
+        setLoading(false);
+        setAlert(true);
+        setalertStatus('success');
+        setAlertIcon(<IoCheckmark fontSize={25} />);
+        setalertMsg('Your Video has been uploaded to our server');
+        setTimeout(()=>{
+           setAlert(false);
+        },4000);
       });
     });
 
@@ -75,6 +90,15 @@ const Create = () => {
       justifyContent={'center'}
       gap={2}
       >
+
+        {alert && (
+          <AlertMsg 
+          status={alertstatus} 
+          msg={alertMsg} 
+          icon={alertIcon} />
+        )}
+
+
        <Input 
        variant={'flushed'} 
        placeholder="Title"
