@@ -1,7 +1,7 @@
 //prettier-ignore
 import {Input, Flex, useColorMode, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, Button, Text, InputGroup, InputLeftElement, FormLabel } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react'
-import { IoCheckmark, IoChevronDown, IoCloudUpload, IoLocation, IoTrash } from 'react-icons/io5';
+import { IoCheckmark, IoChevronDown, IoCloudUpload, IoLocation, IoTrash, IoWarning } from 'react-icons/io5';
 import { categories } from '../data';
 import Spinner from './Spinner';
 
@@ -63,6 +63,14 @@ const Create = () => {
     const deleteRef = ref(storage,videoAsset);
     deleteObject(deleteRef).then(()=>{
       setVideoAsset(null);
+      setAlert(true);
+      setalertStatus('error');
+      setAlertIcon(<IoWarning fontSize={25}/>);
+      setalertMsg('Your Video has been deleted from our server');
+      setTimeout(()=>{
+         setAlert(false);
+      },4000);
+      
     }).catch((error)=>{
       console.log(error);
     })
