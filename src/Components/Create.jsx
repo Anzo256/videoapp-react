@@ -1,7 +1,7 @@
 //prettier-ignore
-import {Input, Flex, useColorMode, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, Button, Text, InputGroup, InputLeftElement, FormLabel, Box } from '@chakra-ui/react';
+import {Input, Flex, useColorMode, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, Button, Text, InputGroup, InputLeftElement, FormLabel } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react'
-import { IoChevronDown, IoCloudUpload, IoLocation } from 'react-icons/io5';
+import { IoChevronDown, IoCloudUpload, IoLocation, IoTrash } from 'react-icons/io5';
 import { categories } from '../data';
 import Spinner from './Spinner';
 
@@ -45,8 +45,9 @@ const Create = () => {
   };
 
   useEffect(()=>{
-    console.log
+  
   },[videoAsset])
+
   return (
     <Flex justifyContent={'center'}
     alignItems='center'
@@ -177,7 +178,37 @@ const Create = () => {
              
            )}
           </FormLabel>
-        ) :  (<Box>Something</Box>)} 
+        ) :  (
+          <Flex
+          width={'full'}
+          height="full"
+          justifyContent={"center"}
+          alignItems={"center"}
+          bg="black"
+          position={"relative"}
+          >
+          <Flex
+          justifyContent={"center"}
+          alignItems={"center"}
+          width={'40px'}
+          height={"40px"}
+          rounded="full"
+          bg={'red'}
+          top={5}
+          right={5}
+          position={"absolute"}
+          cursor={"pointer"}
+          zIndex={10}
+          >
+         <IoTrash fontSize={20} color="white"/>
+          </Flex>
+          <video
+          src={videoAsset}
+          controls
+          style={{width: "100%", height:"100%"}}
+          />
+          </Flex>
+        )} 
        </Flex>
       </Flex>
     </Flex>
